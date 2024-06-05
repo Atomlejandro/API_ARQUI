@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 @RestController
 @RequestMapping("/api/books")
@@ -32,10 +33,33 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @PostMapping("/purchase/{bookId}")
-    public ResponseEntity<String> purchaseBook(@PathVariable Long bookId, @RequestParam String cardNumber) {
+    @GetMapping("/price")
+    public ResponseEntity<List<Book>> getBooksByPrice(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        List<Book> books = bookService.findBooksByPrice(minPrice, maxPrice);
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @GetMapping("/genre/{genre}")
+    public ResponseEntity<List<Book>> getBooksByGenre(@PathVariable String genre) {
+        List<Book> books = bookService.findBooksByGenre(genre);
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @GetMapping("/publishedDate")
+    public ResponseEntity<List<Book>> getBooksByPublishedDate(@RequestParam Date startDate, @RequestParam Date endDate) {
+        List<Book> books = bookService.findBooksByPublishedDate(startDate, endDate);
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+    @GetMapping("/author/{author}")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author) {
+        List<Book> books = bookService.findBooksByAuthor(author);
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @PostMapping("/purchase")
+    public ResponseEntity<String> purchaseBooks(@RequestParam String cardNumber, @RequestBody List<Long> bookIds) {
         try {
-            boolean success = bookService.purchaseBook(bookId, cardNumber);
+            boolean success = bookService.purchaseBooks(bookIds, cardNumber);
             if (success) {
                 return new ResponseEntity<>("Purchase successful", HttpStatus.OK);
             }
@@ -44,4 +68,5 @@ public class BookController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
 }

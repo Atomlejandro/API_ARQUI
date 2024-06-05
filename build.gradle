@@ -6,10 +6,7 @@ plugins {
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-
-java {
-    sourceCompatibility = '17'
-}
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -19,6 +16,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // https://mvnrepository.com/artifact/software.amazon.awssdk/dynamodb
+    implementation 'software.amazon.awssdk:dynamodb:2.25.65'
+    implementation 'software.amazon.awssdk:auth:2.25.65' // Verifica la última versión
+    // https://mvnrepository.com/artifact/software.amazon.awssdk/protocol-core
+    implementation 'software.amazon.awssdk:protocol-core:2.25.65'
+
+
+
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
